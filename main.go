@@ -43,6 +43,10 @@ func main() {
 			Usage: "password for the registry",
 		},
 		cli.StringFlag{
+			Name:  "auth-url",
+			Usage: "alternate url for registry authentication",
+		},
+		cli.StringFlag{
 			Name:  "timeout",
 			Value: "1m",
 			Usage: "timeout for HTTP requests",
@@ -87,7 +91,12 @@ func main() {
 }
 
 func createRegistryClient(c *cli.Context, domain string) (*registry.Registry, error) {
-	auth, err := repoutils.GetAuthConfig(c.GlobalString("username"), c.GlobalString("password"), domain)
+	if c.GlobalString("auth-url") != "" {
+		authDomain := c.GlobalString("auth-url")
+	} else {
+		authDomain := domain
+	}
+	auth, err := repoutils.GetAuthConfig(c.GlobalString("username"), c.GlobalString("password"), authDomain)
 	if err != nil {
 		return nil, err
 	}

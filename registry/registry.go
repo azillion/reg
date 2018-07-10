@@ -45,6 +45,7 @@ type Opt struct {
 	Debug    bool
 	SkipPing bool
 	Timeout  time.Duration
+	authURL  string
 }
 
 // New creates a new Registry struct with the given URL and credentials.
