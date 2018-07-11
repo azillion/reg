@@ -4,6 +4,8 @@ type tagsResponse struct {
 	Tags []string `json:"tags"`
 }
 
+// TODO: https://github.com/docker/distribution/blob/master/docs/spec/api.md#pagination-1
+// , page, max-tags int
 // Tags returns the tags for a specific repository.
 func (r *Registry) Tags(repository string) ([]string, error) {
 	url := r.url("/v2/%s/tags/list", repository)
