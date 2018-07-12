@@ -10,7 +10,6 @@ type catalogResponse struct {
 	Repositories []string `json:"repositories"`
 }
 
-// TODO: https://github.com/docker/distribution/blob/master/docs/spec/api.md#pagination
 // Catalog returns the repositories in a registry.
 func (r *Registry) Catalog(u string) ([]string, error) {
 	if u == "" {
