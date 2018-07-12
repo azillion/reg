@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/genuinetools/reg/registry"
+	"github.com/azillion/reg/registry"
 	"github.com/urfave/cli"
 )
 

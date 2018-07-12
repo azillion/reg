@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/azillion/reg/registry"
 	"github.com/coreos/clair/api/v3/clairpb"
-	"github.com/genuinetools/reg/registry"
 )
 
 // Vulnerabilities scans the given repo and tag.

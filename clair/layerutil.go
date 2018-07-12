@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/azillion/reg/registry"
 	"github.com/coreos/clair/api/v3/clairpb"
 	"github.com/docker/distribution"
-	"github.com/genuinetools/reg/registry"
 )
 
 // NewClairLayer will form a layer struct required for a clair scan.

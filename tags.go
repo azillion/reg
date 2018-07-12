@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/genuinetools/reg/registry"
+	"github.com/azillion/reg/registry"
 	"github.com/urfave/cli"
 )
 

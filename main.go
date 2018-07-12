@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/genuinetools/reg/registry"
-	"github.com/genuinetools/reg/repoutils"
-	"github.com/genuinetools/reg/version"
+	"github.com/azillion/reg/registry"
+	"github.com/azillion/reg/repoutils"
+	"github.com/azillion/reg/version"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
@@ -44,7 +44,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "auth-url",
-			Usage: "alternate url for registry authentication",
+			Usage: "alternate URL for registry authentication (ex. auth.docker.io)",
 		},
 		cli.StringFlag{
 			Name:  "timeout",
@@ -91,10 +91,9 @@ func main() {
 }
 
 func createRegistryClient(c *cli.Context, domain string) (*registry.Registry, error) {
+	authDomain := domain
 	if c.GlobalString("auth-url") != "" {
-		authDomain := c.GlobalString("auth-url")
-	} else {
-		authDomain := domain
+		authDomain = c.GlobalString("auth-url")
 	}
 	auth, err := repoutils.GetAuthConfig(c.GlobalString("username"), c.GlobalString("password"), authDomain)
 	if err != nil {
@@ -113,7 +112,7 @@ func createRegistryClient(c *cli.Context, domain string) (*registry.Registry, er
 	}
 
 	// Create the registry client.
-	return registry.New(auth, registry.Opt{
+	return registry.New(domain, auth, registry.Opt{
 		Insecure: c.GlobalBool("insecure"),
 		Debug:    c.GlobalBool("debug"),
 		SkipPing: c.GlobalBool("skip-ping"),

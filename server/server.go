@@ -8,11 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/genuinetools/reg/clair"
-	"github.com/genuinetools/reg/registry"
-	"github.com/genuinetools/reg/repoutils"
+	"github.com/azillion/reg/clair"
+	"github.com/azillion/reg/registry"
+	"github.com/azillion/reg/repoutils"
 	"github.com/gorilla/mux"
-	wordwrap "github.com/mitchellh/go-wordwrap"
+	"github.com/mitchellh/go-wordwrap"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
@@ -64,6 +64,10 @@ func main() {
 			Name:  "registry, r",
 			Usage: "URL to the private registry (ex. r.j3ss.co)",
 		},
+		cli.StringFlag{
+			Name:  "auth-url",
+			Usage: "alternate URL for registry authentication (ex. auth.docker.io)",
+		},
 		cli.BoolFlag{
 			Name:  "insecure, k",
 			Usage: "do not verify tls certificates of registry",
@@ -105,7 +109,15 @@ func main() {
 		},
 	}
 	app.Action = func(c *cli.Context) error {
-		auth, err := repoutils.GetAuthConfig(c.GlobalString("username"), c.GlobalString("password"), c.GlobalString("registry"))
+		domain, authDomain := c.GlobalString("registry"), c.GlobalString("auth-url")
+		if domain == "" {
+			domain = repoutils.DefaultDockerRegistry
+		}
+		if authDomain == "" {
+			authDomain = domain
+		}
+
+		auth, err := repoutils.GetAuthConfig(c.GlobalString("username"), c.GlobalString("password"), authDomain)
 		if err != nil {
 			logrus.Fatal(err)
 		}
@@ -117,7 +129,7 @@ func main() {
 		}
 
 		// Create the registry client.
-		r, err = registry.New(auth, registry.Opt{
+		r, err = registry.New(domain, auth, registry.Opt{
 			Insecure: c.GlobalBool("insecure"),
 			Debug:    c.GlobalBool("debug"),
 			SkipPing: c.GlobalBool("skip-ping"),

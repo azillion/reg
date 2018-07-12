@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/genuinetools/reg/registry"
+	"github.com/azillion/reg/registry"
 	"github.com/urfave/cli"
 )
 
