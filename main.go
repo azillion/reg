@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/azillion/reg/registry"
-	"github.com/azillion/reg/repoutils"
-	"github.com/azillion/reg/version"
+	"github.com/genuinetools/reg/registry"
+	"github.com/genuinetools/reg/repoutils"
+	"github.com/genuinetools/reg/version"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )

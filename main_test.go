@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/azillion/reg/testutils"
 	"github.com/docker/docker/client"
+	"github.com/genuinetools/reg/testutils"
 )
 
 const (
