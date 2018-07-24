@@ -43,10 +43,12 @@ Icon
 .Trashes
 
 reg
-server/server
 testreg
 .certs
 cross/
+internal/
+server/static/index.html
+server/static/repo/
 
 # Go coverage results
 coverage.txt
