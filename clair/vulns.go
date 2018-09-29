@@ -42,6 +42,8 @@ func (c *Clair) Vulnerabilities(r *registry.Registry, repo, tag string) (Vulnera
 		}
 	}
 
+	report.Name = filteredLayers[0].Digest.String()
+
 	vl, err := c.GetLayer(filteredLayers[0].Digest.String(), true, true)
 	if err != nil {
 		return report, err
@@ -93,6 +95,8 @@ func (c *Clair) VulnerabilitiesV3(r *registry.Registry, repo, tag string) (Vulne
 		return report, nil
 	}
 
+	report.Name = layers[0].Digest.String()
+
 	clairLayers := []*clairpb.PostAncestryRequest_PostLayer{}
 	for i := len(layers) - 1; i >= 0; i-- {
 		// Form the clair layer.
@@ -111,7 +115,7 @@ func (c *Clair) VulnerabilitiesV3(r *registry.Registry, repo, tag string) (Vulne
 	}
 
 	// Get the ancestry.
-	vl, err := c.GetAncestry(layers[0].Digest.String(), true, true)
+	vl, err := c.GetAncestry(layers[0].Digest.String())
 	if err != nil {
 		return report, err
 	}
@@ -121,17 +125,19 @@ func (c *Clair) VulnerabilitiesV3(r *registry.Registry, repo, tag string) (Vulne
 	}
 
 	// Get the vulns.
-	for _, f := range vl.Features {
-		for _, v := range f.Vulnerabilities {
-			report.Vulns = append(report.Vulns, Vulnerability{
-				Name:          v.Name,
-				NamespaceName: v.NamespaceName,
-				Description:   v.Description,
-				Link:          v.Link,
-				Severity:      v.Severity,
-				Metadata:      map[string]interface{}{v.Metadata: ""},
-				FixedBy:       v.FixedBy,
-			})
+	for _, l := range vl.GetLayers() {
+		for _, f := range l.GetDetectedFeatures() {
+			for _, v := range f.GetVulnerabilities() {
+				report.Vulns = append(report.Vulns, Vulnerability{
+					Name:          v.Name,
+					NamespaceName: v.NamespaceName,
+					Description:   v.Description,
+					Link:          v.Link,
+					Severity:      v.Severity,
+					Metadata:      map[string]interface{}{v.Metadata: ""},
+					FixedBy:       v.FixedBy,
+				})
+			}
 		}
 	}
 
