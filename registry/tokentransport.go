@@ -29,6 +29,8 @@ func (t *TokenTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 
 	authService, err := isTokenDemand(resp)
 	if err != nil {
+		defer resp.Body.Close()
+		io.Copy(ioutil.Discard,resp.Body)
 		return nil, err
 	}
 
@@ -36,6 +38,8 @@ func (t *TokenTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		return resp, nil
 	}
 
+	defer resp.Body.Close()
+	io.Copy(ioutil.Discard,resp.Body)
 	return t.authAndRetry(authService, req)
 }
 
